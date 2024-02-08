@@ -1,23 +1,17 @@
-var preguntas = ['Cual es tu nombre?',
-                 'Cuantos años tienes?',
-                 'Cual es tu lenguaje de programacion favorito?'];
+const eventEmitter = require('events').EventEmitter;
+const util = require('util');
 
-var respuestas = [ ];
-
-function pregunta(i){
-     process.stdout.write(preguntas[i]);
+var Persona = function(nombre){
+    this.nombre = nombre;
+     
 }
+util.inherits(Persona, eventEmitter);
+let persona = new Persona('Bob');
 
-process.stdin.on('data', function(data){
-   respuestas.push(data.toString().trim());
-    if(respuestas.length < preguntas.length){
-        pregunta(respuestas.length);
-    }else{
-     process.exit();
-}
+
+persona.on('hablar', (mensaje) => {
+  console.log(`${persona.nombre}: ${mensaje}`);
+ 
+  
 });
-
-process.on('exit', function() {
-    process.stdout.write(`Tu nombre es ${respuestas[0]} tiene ${respuestas[1]} años y tu lenguaje de programacion favorito es  ${respuestas[2]}` ); 
-})
-pregunta(0); 
+persona.emit('hablar', 'Hoy es un gran dia');
